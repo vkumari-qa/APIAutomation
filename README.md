@@ -99,7 +99,8 @@ After test execution, open the Allure report to view:
 
 📸 Screenshot Example:
 > ![Sample Allure Report]
-> !
+> https://github.com/vkumari-qa/APIAutomation/blob/main/sample%20report.png
+
 
 ---
 
