@@ -1,13 +1,11 @@
-# Write a FastAPI entrypoint
-
 from datetime import timedelta
-
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
+from passlib.context import CryptContext
 
-from bookmgmt import router as book_router
-from database import UserCredentials, get_db
-from utils import create_access_token
+from bookstore.bookmgmt import router as book_router
+from bookstore.database import UserCredentials, get_db
+from bookstore.utils import create_access_token  # assuming utils.py is inside bookstore/
 
 app = FastAPI()
 
@@ -18,9 +16,6 @@ app.include_router(book_router, tags=["Books"])
 async def get_health():
     return {"status": "up"}
 
-
-from fastapi import HTTPException
-from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -43,6 +38,3 @@ async def login_for_access_token(user_credentials: UserCredentials, db: Session 
     user = db.query(UserCredentials).filter(UserCredentials.email == user_credentials.email).first()
     if not user or not pwd_context.verify(user_credentials.password, user.password):
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    access_token_expires = timedelta(minutes=30)
-    access_token = create_access_token(data={"sub": user.email}, expires_delta=access_token_expires)
-    return {"access_token": access_token, "token_type": "bearer"}

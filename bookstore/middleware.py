@@ -1,12 +1,9 @@
-# Write a middleware that extracts JWT token from the header and validates it
-import os
-
 import jwt
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt import PyJWTError
 
-from constants import ALGORITHM, SECRET_KEY
+from bookstore.constants import ALGORITHM, SECRET_KEY
 
 
 class JWTBearer(HTTPBearer):
